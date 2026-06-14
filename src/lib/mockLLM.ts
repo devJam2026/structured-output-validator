@@ -1,10 +1,20 @@
 export function getMockLLMResponse(input: string) {
-    if (input.toLowerCase().includes("urgent") || input.toLowerCase().includes("payment")) {
+    const lowerInput = input.toLowerCase();
+
+    if (
+        lowerInput.includes("urgent") ||
+        lowerInput.includes("payment") ||
+        lowerInput.includes("blocked")
+    ) {
         return JSON.stringify(
             {
                 classification: "scam",
                 confidence: 0.91,
-                risk_factors: ["Urgency", "Suspicious payment request"],
+                risk_factors: [
+                    "Urgency",
+                    "Suspicious payment request",
+                    "Account threat language",
+                ],
                 safe_action: "Do not click the link or send money.",
             },
             null,

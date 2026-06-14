@@ -1,6 +1,7 @@
 import { ScamAnalysisSchema } from "./schema";
+import type { ValidationResult } from "../types/validation";
 
-export function validateLLMOutput(rawOutput: string) {
+export function validateLLMOutput(rawOutput: string): ValidationResult {
     try {
         const parsed = JSON.parse(rawOutput);
         const result = ScamAnalysisSchema.safeParse(parsed);
@@ -10,7 +11,7 @@ export function validateLLMOutput(rawOutput: string) {
                 isValid: false,
                 parsed: null,
                 errors: result.error.issues.map((issue) => ({
-                    path: issue.path.join("."),
+                    path: issue.path.join(".") || "root",
                     message: issue.message,
                 })),
             };
