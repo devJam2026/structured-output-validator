@@ -4,12 +4,14 @@ type InputMessageCardProps = {
     input: string;
     onInputChange: (value: string) => void;
     onAnalyze: () => void;
+    isLoading: boolean;
 };
 
 export function InputMessageCard({
     input,
     onInputChange,
     onAnalyze,
+    isLoading,
 }: InputMessageCardProps) {
     return (
         <SectionCard title="Input Message">
@@ -22,9 +24,10 @@ export function InputMessageCard({
 
             <button
                 onClick={onAnalyze}
-                className="mt-6 rounded-xl bg-cyan-500 px-8 py-4 text-lg font-bold text-slate-950 transition hover:bg-cyan-400"
+                disabled={isLoading}
+                className="mt-6 rounded-xl bg-cyan-500 px-8 py-4 text-lg font-bold text-slate-950 transition hover:bg-cyan-400 disabled:cursor-not-allowed disabled:opacity-60"
             >
-                Analyze & Validate
+                {isLoading ? "Analyzing..." : "Analyze & Validate"}
             </button>
         </SectionCard>
     );

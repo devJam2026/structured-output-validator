@@ -1,19 +1,22 @@
 import { buildScamAnalysisPrompt } from "./buildPrompt.js";
-import { callMockLLM } from "./mockProvider.js";
+import { getLLMProvider } from "./providerResolver.js";
 import { validateLLMOutput } from "./validator.js";
 
 export async function analyzeMessage(message: string) {
     const startedAt = Date.now();
 
     const prompt = buildScamAnalysisPrompt(message);
-    const rawOutput = await callMockLLM(prompt);
-    const validation = validateLLMOutput(rawOutput);
+    const llmProvider = getLLMProvider();
+
+    const llmResponse = await llmProvider.generateStructuredOutput(prompt);
+    const validation = validateLLMOutput(llmResponse.rawOutput);
 
     return {
         input: message,
         promptVersion: "scam-analysis-v1",
-        provider: "mock",
-        rawOutput,
+        provider: llmResponse.provider,
+        model: llmResponse.model,
+        rawOutput: llmResponse.rawOutput,
         validation,
         metadata: {
             latencyMs: Date.now() - startedAt,
