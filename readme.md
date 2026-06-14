@@ -4,6 +4,8 @@
 
 Convert unpredictable LLM text into reliable, validated JSON contracts.
 
+<img width="1920" height="2146" alt="image" src="https://github.com/user-attachments/assets/d1cc5d61-6a93-423a-9a57-6dba392d6c57" />
+
 ---
 
 ## Why This Project Exists
