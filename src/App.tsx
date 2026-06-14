@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { AppHeader } from "./components/AppHeader";
 import { InputMessageCard } from "./components/InputMessageCard";
-import { RawOutputCard } from "./components/RawOutputCard";
+import { RawOutputCard } from "./components/RawOutPutCard";
 import { SchemaViewerCard } from "./components/SchemaViewerCard";
 import { ValidationResultCard } from "./components/ValidationResultCard";
 import { analyzeMessageApi } from "./services/analyzeApi";
@@ -18,6 +18,9 @@ export default function App() {
   const [error, setError] = useState("");
 
   const [metadata, setMetadata] = useState<{
+    provider: string;
+    model: string;
+    promptVersion: string;
     latencyMs: number;
     timestamp: string;
   } | null>(null);
@@ -31,7 +34,13 @@ export default function App() {
 
       setRawOutput(result.rawOutput);
       setValidation(result.validation);
-      setMetadata(result.metadata);
+      setMetadata({
+        provider: result.provider,
+        model: result.model,
+        promptVersion: result.promptVersion,
+        latencyMs: result.metadata.latencyMs,
+        timestamp: result.metadata.timestamp,
+      });
     } catch (error) {
       setError(
         error instanceof Error
@@ -73,12 +82,38 @@ export default function App() {
         )}
 
         {metadata && (
-          <div className="mt-8 rounded-xl border border-slate-800 bg-slate-900/70 p-5 text-sm text-slate-400">
-            <span className="font-semibold text-slate-200">
-              Request Metadata:
-            </span>{" "}
-            latency {metadata.latencyMs}ms · {metadata.timestamp}
-          </div>
+          <section className="mt-8 grid gap-4 rounded-xl border border-slate-800 bg-slate-900/70 p-5 text-sm text-slate-400 md:grid-cols-5">
+            <div>
+              <p className="text-slate-500">Provider</p>
+              <p className="font-semibold text-slate-200">{metadata.provider}</p>
+            </div>
+
+            <div>
+              <p className="text-slate-500">Model</p>
+              <p className="font-semibold text-slate-200">{metadata.model}</p>
+            </div>
+
+            <div>
+              <p className="text-slate-500">Prompt Version</p>
+              <p className="font-semibold text-slate-200">
+                {metadata.promptVersion}
+              </p>
+            </div>
+
+            <div>
+              <p className="text-slate-500">Latency</p>
+              <p className="font-semibold text-slate-200">
+                {metadata.latencyMs}ms
+              </p>
+            </div>
+
+            <div>
+              <p className="text-slate-500">Timestamp</p>
+              <p className="font-semibold text-slate-200">
+                {metadata.timestamp}
+              </p>
+            </div>
+          </section>
         )}
       </div>
     </main>
